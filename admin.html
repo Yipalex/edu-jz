@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#26231F" />
+  <title>机构管理后台 · 教培机构</title>
+  <link rel="icon" type="image/jpeg" href="assets/img/logo.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="zx/tokens.css?v=20261101b" />
+  <link rel="stylesheet" href="zx/shell.css?v=20261101b" />
+  <link rel="stylesheet" href="zx/components.css?v=20261101b" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20261101b" />
+</head>
+<body class="admin-body">
+
+  <main class="stage admin-stage">
+
+    <!-- 登录（骨架挂载前全屏展示） -->
+    <section class="screen is-show" id="screen-admin-login">
+      <div class="login-brand">
+        <img src="assets/img/logo.jpeg" alt="教培机构 LOGO" />
+        <span class="lb-name">教培机构</span>
+        <span class="lb-sub">edu CALLIGRAPHY &amp; PAINTING EDUCATION</span>
+      </div>
+      <form class="card form admin-login" id="adminLoginForm" novalidate>
+        <h2 class="form-title">教务审核登录</h2>
+        <p class="form-sub">请输入机构管理密码进入审核后台</p>
+        <div class="field">
+          <label for="adminPwd">管理密码 <b>*</b></label>
+          <input type="password" id="adminPwd" placeholder="请输入管理密码" autocomplete="current-password" />
+          <em class="field-error" data-for="adminPwd"></em>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="adminLoginBtn">进入后台</button>
+      </form>
+    </section>
+
+    <!-- 审核列表（骨架挂载后由侧栏导航切换面板） -->
+    <section class="screen" id="screen-admin-list">
+
+      <!-- ===== 面板 1 · 报名审核 ===== -->
+      <div class="admin-panel is-show" id="panel-review">
+        <div class="admin-page-head">
+          <h2>报名审核</h2>
+          <p>审核教师报名申请，通过或填写原因拒绝；可查看学历材料附件</p>
+        </div>
+        <div class="admin-toolbar">
+          <div class="admin-stats" id="adminStats"></div>
+          <div class="admin-filters" id="adminFilters">
+            <button type="button" class="filter-chip is-active" data-filter="all">全部</button>
+            <button type="button" class="filter-chip" data-filter="待审核">待审核</button>
+            <button type="button" class="filter-chip" data-filter="已通过">已通过</button>
+            <button type="button" class="filter-chip" data-filter="已拒绝">已拒绝</button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-refresh" id="refreshBtn">↻ 刷新</button>
+        </div>
+
+        <div class="admin-list" id="adminList"></div>
+        <p class="query-empty is-hidden" id="emptyTip">暂无符合条件的报名记录</p>
+      </div>
+
+      <!-- ===== 面板 2 · 成绩录入 ===== -->
+      <div class="admin-panel" id="panel-scores">
+        <div class="admin-page-head">
+          <h2>成绩录入</h2>
+          <p>批量粘贴成绩数据入库，教师可在报名页凭姓名与手机号查询</p>
+        </div>
+        <div class="card score-entry">
+          <h2 class="form-title">批量录入成绩</h2>
+          <p class="form-sub">每行一位教师，字段用逗号或空格分隔：<b>姓名，手机号，级别，分数，结果，备注（后两项可省）</b><br />示例：张三，13800000000，中级教师资格证，86，通过<br />结果可填：通过 / 未通过 / 待定</p>
+
+          <div class="field">
+            <label for="examBatch">考核批次</label>
+            <input type="text" id="examBatch" placeholder="例如：2026 年第一期考核" />
+          </div>
+
+          <div class="field">
+            <label for="scoreInput">成绩数据 <b>*</b></label>
+            <textarea id="scoreInput" rows="7" placeholder="张三，13800000000，中级教师资格证，86，通过&#10;李四，13800000000，高级教师资格证，72，未通过，试讲环节需加强"></textarea>
+          </div>
+
+          <div class="score-actions">
+            <button type="button" class="btn btn-outline" id="parseBtn">解析预览</button>
+            <button type="button" class="btn btn-primary" id="submitScoresBtn" disabled>确认入库</button>
+          </div>
+
+          <div class="score-preview is-hidden" id="scorePreview"></div>
+        </div>
+
+        <div class="admin-toolbar">
+          <div class="admin-stats" id="scoreStats"></div>
+          <button type="button" class="btn btn-ghost btn-refresh" id="refreshScoresBtn" style="margin-left:auto">↻ 刷新</button>
+        </div>
+        <div class="admin-list" id="scoreList"></div>
+        <p class="query-empty is-hidden" id="scoreEmptyTip">暂无成绩记录</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 附件查看弹层 -->
+  <div class="modal is-hidden" id="attachModal">
+    <div class="modal-card card">
+      <div class="modal-head">
+        <h3>学历材料</h3>
+        <button type="button" class="file-remove" id="attachClose">×</button>
+      </div>
+      <div class="modal-body" id="attachBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="assets/js/sdk-adapter.js?v=20261101b"></script>
+  <script src="zx/shell.js?v=20261101b"></script>
+  <script src="assets/js/admin.js?v=20261101b"></script>
+</body>
+</html>
