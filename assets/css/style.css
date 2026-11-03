@@ -1,5 +1,5 @@
 /* ============================================================
-   教培机构 · 教师资格证报名系统（墨·纸·印 统一设计语言 V1.0）
+   泽曦书画 · 教师资格证报名系统（墨·纸·印 统一设计语言 V1.0）
    色板/字体/圆角/阴影全部取自 zx/tokens.css（--zx-*）。
    类名与业务 JS 保持不变，仅重写视觉定义。
    ============================================================ */
@@ -60,10 +60,9 @@ body {
 .brand-logo {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 3px 10px rgba(163, 67, 50, 0.26);
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.3; }
