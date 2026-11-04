@@ -58,11 +58,11 @@ body {
 .brand { display: flex; align-items: center; gap: 14px; }
 
 .brand-logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  border-radius: 0;
   object-fit: contain;
-  box-shadow: 0 3px 10px rgba(163, 67, 50, 0.26);
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, .18));
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.3; }
